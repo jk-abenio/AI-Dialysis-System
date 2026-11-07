@@ -21,7 +21,26 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='schedule',
             name='completed_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='completed_dialysis_schedules', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                db_constraint=False,
+                db_index=False,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='completed_dialysis_schedules',
+                to=settings.AUTH_USER_MODEL,
+            ),
+        ),
+        migrations.AlterField(
+            model_name='schedule',
+            name='completed_by',
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='completed_dialysis_schedules',
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
             model_name='schedule',
@@ -31,7 +50,26 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='treatmentrecord',
             name='created_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='created_treatment_records', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                db_constraint=False,
+                db_index=False,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='created_treatment_records',
+                to=settings.AUTH_USER_MODEL,
+            ),
+        ),
+        migrations.AlterField(
+            model_name='treatmentrecord',
+            name='created_by',
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='created_treatment_records',
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
             model_name='treatmentrecord',
@@ -41,6 +79,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='treatmentrecord',
             name='updated_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='updated_treatment_records', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                db_constraint=False,
+                db_index=False,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='updated_treatment_records',
+                to=settings.AUTH_USER_MODEL,
+            ),
+        ),
+        migrations.AlterField(
+            model_name='treatmentrecord',
+            name='updated_by',
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='updated_treatment_records',
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
