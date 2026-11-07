@@ -36,3 +36,9 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Old Python virtual environments
+venv_old/
+
+# Allow the public TiDB CA certificate for deployment
+!backend/certs/tidb-ca.pem

@@ -12,7 +12,12 @@ import {
     FaLink,
 } from "react-icons/fa";
 
-const API_BASE = `${window.location.protocol}//${window.location.hostname}:8000/api/`;
+const configuredApiUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+
+const API_BASE = (
+    configuredApiUrl ||
+    `${window.location.protocol}//${window.location.hostname}:8000/api/`
+).replace(/\/?$/, "/");
 
 export default function StaffPasswordSetup() {
     const [searchParams] = useSearchParams();

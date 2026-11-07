@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { logoutUser } from "../utils/auth";
 
@@ -5,11 +6,20 @@ import { logoutUser } from "../utils/auth";
 // API BASE URL
 // ========================================
 
-// Automatically determine the host from the current website URL.
-// Computer: http://localhost:5173
-// Phone:    http://192.168.1.6:5173
+// Deployment: Set VITE_API_BASE_URL in Render.
+// Local development: Automatically uses the current
+// hostname with backend port 8000.
+//
+// Examples:
+// Local:  http://localhost:8000/api/
+// Render: https://your-backend.onrender.com/api/
 
-const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:8000/api/`;
+const configuredApiUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+
+const API_BASE_URL = (
+    configuredApiUrl ||
+    `${window.location.protocol}//${window.location.hostname}:8000/api/`
+).replace(/\/?$/, "/");
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -45,7 +55,7 @@ api.interceptors.request.use((config) => {
     const requestUrl = config.url || "";
 
     // Do not attach an old access token to a login request.
-    const isLoginRequest = /\/login\/?$/.test(requestUrl);
+    const isLoginRequest = /\/login\/?$/i.test(requestUrl);
 
     if (isLoginRequest) {
         if (config.headers) {
@@ -83,8 +93,8 @@ api.interceptors.response.use(
         const requestUrl = originalRequest.url || "";
 
         // Identify authentication endpoints.
-        const isLoginRequest = /\/login\/?$/.test(requestUrl);
-        const isRefreshRequest = /\/token\/refresh\/?$/.test(requestUrl);
+        const isLoginRequest = /\/login\/?$/i.test(requestUrl);
+        const isRefreshRequest = /\/token\/refresh\/?$/i.test(requestUrl);
 
         // ========================================
         // HANDLE EXPIRED ACCESS TOKEN
@@ -108,9 +118,7 @@ api.interceptors.response.use(
                     return Promise.reject(error);
                 }
 
-                // Request a new access token.
-                // Use plain axios to avoid running this through
-                // the api instance's response interceptor.
+                // Request a new access token using plain Axios.
                 const response = await axios.post(
                     `${API_BASE_URL}token/refresh/`,
                     { refresh }
@@ -155,7 +163,6 @@ api.interceptors.response.use(
         }
 
         // Pass the original error back to the calling component.
-        // LoginForm can now display "Invalid username or password."
         return Promise.reject(error);
     }
 );

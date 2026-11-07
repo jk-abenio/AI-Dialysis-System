@@ -23,7 +23,13 @@ import {
     MdMonitor,
 } from "react-icons/md";
 
-const API_BASE = `${window.location.protocol}//${window.location.hostname}:8000/api/`;
+const configuredApiUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+
+const API_BASE = (
+    configuredApiUrl ||
+    `${window.location.protocol}//${window.location.hostname}:8000/api/`
+).replace(/\/?$/, "/");
+
 const MIN_LOGIN_LOADING_TIME = 1800;
 
 export default function StaffLogin() {

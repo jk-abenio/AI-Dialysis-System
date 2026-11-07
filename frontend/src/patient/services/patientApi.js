@@ -1,8 +1,16 @@
 
 import axios from "axios";
 
-const API_BASE_URL =
-    `${window.location.protocol}//${window.location.hostname}:8000/api/`;
+// ========================================
+// API BASE URL
+// ========================================
+
+const configuredApiUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+
+const API_BASE_URL = (
+    configuredApiUrl ||
+    `${window.location.protocol}//${window.location.hostname}:8000/api/`
+).replace(/\/?$/, "/");
 
 const LOGIN_URL = "patients/login/";
 const REFRESH_URL = "token/refresh/";
@@ -12,11 +20,19 @@ const patientApi = axios.create({
     baseURL: API_BASE_URL,
 });
 
+// ========================================
+// PATIENT TOKENS
+// ========================================
+
 const getPatientAccessToken = () =>
     localStorage.getItem("patientToken");
 
 const getPatientRefreshToken = () =>
     localStorage.getItem("patientRefresh");
+
+// ========================================
+// PATIENT SESSION
+// ========================================
 
 const clearPatientSession = () => {
     localStorage.removeItem("patientToken");
@@ -27,7 +43,6 @@ const clearPatientSession = () => {
 const redirectToPatientLogin = () => {
     clearPatientSession();
 
-    // Avoid repeatedly redirecting if already on the login page.
     if (window.location.pathname !== PATIENT_LOGIN_PATH) {
         window.location.replace(PATIENT_LOGIN_PATH);
     }
@@ -36,7 +51,10 @@ const redirectToPatientLogin = () => {
 // Share one refresh request if several API calls fail together.
 let refreshPromise = null;
 
-// Attach the patient token only to protected patient API requests.
+// ========================================
+// REQUEST INTERCEPTOR
+// ========================================
+
 patientApi.interceptors.request.use(
     (config) => {
         const url = (config.url || "").toLowerCase();
@@ -68,7 +86,10 @@ patientApi.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-// Refresh expired access tokens when possible.
+// ========================================
+// RESPONSE INTERCEPTOR
+// ========================================
+
 patientApi.interceptors.response.use(
     (response) => response,
 
@@ -126,7 +147,7 @@ patientApi.interceptors.response.use(
 
                         localStorage.setItem("patientToken", access);
 
-                        // Save a rotated refresh token if the backend returns one.
+                        // Save a rotated refresh token if returned.
                         if (response.data?.refresh) {
                             localStorage.setItem(
                                 "patientRefresh",
