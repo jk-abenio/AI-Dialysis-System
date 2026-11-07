@@ -1,0 +1,465 @@
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\accounts\models.py ========== 
+from django.db import models
+
+# Create your models here.
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\accounts\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\accounts\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\accounts\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\ai_engine\models.py ========== 
+from django.db import models
+
+# Create your models here.
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\ai_engine\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\ai_engine\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\ai_engine\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\config\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\config\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\dashboard\models.py ========== 
+from django.db import models
+
+# Create your models here.
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\dashboard\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\dashboard\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\email_center\models.py ========== 
+from django.db import models
+
+class GmailConnection(models.Model):
+    email_address = models.EmailField(blank=True, default="")
+    token_data = models.JSONField(default=dict)
+    connected_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email_address or "Gmail Connection"
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\email_center\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\email_center\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\email_center\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\machines\models.py ========== 
+from django.db import models
+
+
+class Machine(models.Model):
+
+    STATUS_CHOICES = [
+        ("Available", "Available"),
+        ("In Use", "In Use"),
+        ("Maintenance", "Maintenance"),
+    ]
+
+    machine_number = models.CharField(
+        max_length=50,
+        unique=True
+    )
+
+    machine_code = models.CharField(
+        max_length=50,
+        unique=True
+    )
+
+    brand = models.CharField(
+        max_length=100
+    )
+
+    location = models.CharField(
+        max_length=100
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="Available"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ["machine_number"]
+
+    def __str__(self):
+        return self.machine_number 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\machines\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\machines\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\machines\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\notifications\models.py ========== 
+from django.db import models
+
+# Create your models here.
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\notifications\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\notifications\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\notifications\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\patients\models.py ========== 
+from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
+class Patient(models.Model):
+
+    GENDER_CHOICES = [
+        ("Male", "Male"),
+        ("Female", "Female"),
+    ]
+
+    STATUS_CHOICES = [
+        ("Active", "Active"),
+        ("Inactive", "Inactive"),
+    ]
+
+    BLOOD_TYPES = [
+        ("A+", "A+"),
+        ("A-", "A-"),
+        ("B+", "B+"),
+        ("B-", "B-"),
+        ("AB+", "AB+"),
+        ("AB-", "AB-"),
+        ("O+", "O+"),
+        ("O-", "O-"),
+    ]
+
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100)
+    patient_id = models.CharField(max_length=20,unique=True)
+    password = models.CharField(max_length=128,default="",)
+    birth_date = models.DateField()
+
+    gender = models.CharField(
+        max_length=10,
+        choices=GENDER_CHOICES
+    )
+
+    blood_type = models.CharField(
+        max_length=5,
+        choices=BLOOD_TYPES
+    )
+
+    contact_number = models.CharField(max_length=20)
+
+    email = models.EmailField(
+        blank=True,
+        null=True
+    )
+
+    address = models.TextField()
+
+    emergency_contact = models.CharField(max_length=100)
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default="Active"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def age(self):
+
+        from datetime import date
+
+        today = date.today()
+
+        return (
+            today.year
+            - self.birth_date.year
+            - (
+                (today.month, today.day)
+                <
+                (self.birth_date.month, self.birth_date.day)
+            )
+        )
+
+    def save(self, *args, **kwargs):
+
+        creating = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        if creating and not self.patient_id:
+
+            self.patient_id = f"P{self.id:05d}"
+
+            super().save(update_fields=["patient_id"])
+
+    def set_password(self, raw_password):
+
+        self.password = make_password(raw_password) 
+
+
+    def check_password(self, raw_password):
+
+        return check_password(raw_password, self.password)
+
+    @property
+    def is_authenticated(self):
+        return True
+
+class PatientMedicalProfile(models.Model):
+
+    DIALYSIS_FREQUENCY = [
+        ("2x/week", "2x/week"),
+        ("3x/week", "3x/week"),
+        ("4x/week", "4x/week"),
+    ]
+
+    SHIFT_CHOICES = [
+        ("Morning", "Morning"),
+        ("Afternoon", "Afternoon"),
+        ("Evening", "Evening"),
+    ]
+
+    VASCULAR_ACCESS = [
+        ("AV Fistula", "AV Fistula"),
+        ("AV Graft", "AV Graft"),
+        ("Catheter", "Catheter"),
+    ]
+
+    patient = models.OneToOneField(
+        Patient,
+        on_delete=models.CASCADE,
+        related_name="medical_profile",
+    )
+
+    weight = models.FloatField()
+
+    dialysis_frequency = models.CharField(
+        max_length=20,
+        choices=DIALYSIS_FREQUENCY,
+    )
+
+    dialysis_duration = models.DecimalField(
+        max_digits=4,
+        decimal_places=1,
+    )
+
+    preferred_shift = models.CharField(
+        max_length=20,
+        choices=SHIFT_CHOICES,
+        blank=True,
+    )
+
+    diabetes = models.BooleanField(default=False)
+
+    hypertension = models.BooleanField(default=False)
+
+    vascular_access = models.CharField(
+        max_length=30,
+        choices=VASCULAR_ACCESS,
+    )
+
+    def __str__(self):
+        return f"{self.patient} Medical Profile"
+
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\patients\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\patients\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\patients\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\reports\models.py ========== 
+from django.db import models
+
+# Create your models here.
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\reports\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\reports\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\reports\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\schedules\models.py ========== 
+from django.db import models
+from patients.models import Patient
+from machines.models import Machine
+from staff.models import Staff
+
+class Schedule(models.Model):
+
+    SHIFT_CHOICES = [
+        ("Morning", "Morning"),
+        ("Afternoon", "Afternoon"),
+        ("Evening", "Evening"),
+    ]
+
+    STATUS_CHOICES = [
+        ("Scheduled", "Scheduled"),
+        ("Completed", "Completed"),
+        ("Missed", "Missed"),
+        ("Cancelled", "Cancelled"),
+    ]
+
+    patient = models.ForeignKey(
+        Patient,
+        on_delete=models.CASCADE,
+        related_name="schedules"
+    )
+
+    dialysis_date = models.DateField()
+
+    dialysis_time = models.TimeField()
+
+    shift = models.CharField(
+        max_length=20,
+        choices=SHIFT_CHOICES,
+        default="Morning"
+    )
+
+    machine = models.ForeignKey(
+        Machine,
+        on_delete=models.CASCADE,
+        related_name="schedules"
+    )
+
+    staff = models.ForeignKey(
+        Staff,
+        on_delete=models.CASCADE,
+        related_name="schedules"
+    )
+
+    notes = models.TextField(blank=True)
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="Scheduled"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["dialysis_date", "dialysis_time"]
+
+    def __str__(self):
+        return f"{self.patient} - {self.dialysis_date}"
+
+class TreatmentRecord(models.Model):
+
+    schedule = models.OneToOneField(
+        Schedule,
+        on_delete=models.CASCADE,
+        related_name="treatment_record"
+    )
+
+    pre_weight = models.FloatField()
+
+    post_weight = models.FloatField()
+
+    blood_pressure_before = models.CharField(max_length=20)
+
+    blood_pressure_after = models.CharField(max_length=20)
+
+    pulse_before = models.PositiveIntegerField()
+
+    pulse_after = models.PositiveIntegerField()
+
+    notes = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Treatment - {self.schedule.patient}" 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\schedules\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\schedules\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\schedules\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\staff\models.py ========== 
+from django.db import models
+
+
+class Staff(models.Model):
+
+    ROLE_CHOICES = [
+        ("Dialysis Nurse", "Dialysis Nurse"),
+        ("Head Nurse", "Head Nurse"),
+        ("Technician", "Technician"),
+        ("Doctor", "Doctor"),
+    ]
+
+    STATUS_CHOICES = [
+        ("Active", "Active"),
+        ("On Leave", "On Leave"),
+        ("Inactive", "Inactive"),
+    ]
+
+    employee_id = models.CharField(
+        max_length=50,
+        unique=True
+    )
+
+    first_name = models.CharField(
+        max_length=100
+    )
+
+    last_name = models.CharField(
+        max_length=100
+    )
+
+    role = models.CharField(
+        max_length=50,
+        choices=ROLE_CHOICES,
+        default="Dialysis Nurse"
+    )
+
+    contact_number = models.CharField(
+        max_length=20
+    )
+
+    email = models.EmailField(
+        unique=True
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="Active"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ["last_name", "first_name"]
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}" 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\staff\migrations\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\staff\migrations\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\staff\__pycache__\models.py ========== 
+ 
+========== C:\Users\jkabe\AI-Dialysis-System\backend\venv\models.py ========== 
